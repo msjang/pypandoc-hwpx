@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="pypandoc-hwpx",
-    version="0.1.0",
+    version="0.1.1",
     packages=find_packages(),
     include_package_data=True,
     package_data={
@@ -18,6 +18,11 @@ setup(
         ],
     },
     author="pypandoc-hwpx Contributors",
+    url="https://github.com/msjang/pypandoc-hwpx",
+    project_urls={
+        "Source": "https://github.com/msjang/pypandoc-hwpx",
+        "Tracker": "https://github.com/msjang/pypandoc-hwpx/issues",
+    },
     description="Convert Markdown/DOCX to HWPX using Pandoc AST",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
