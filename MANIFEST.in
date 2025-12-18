@@ -1,0 +1,5 @@
+include README.md
+include LICENSE
+recursive-include pypandoc_hwpx *.py
+recursive-include pypandoc_hwpx *.hwpx
+prune docs
