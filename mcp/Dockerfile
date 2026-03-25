@@ -15,7 +15,7 @@ COPY setup.py README.md LICENSE ./
 COPY pypandoc_hwpx/ pypandoc_hwpx/
 
 # Install the parent package
-RUN pip install --no-cache-dir -e .
+RUN uv pip install --system -e .
 
 # Copy MCP server project files and sync dependencies
 COPY mcp/pyproject.toml mcp/uv.lock mcp/.python-version mcp/
