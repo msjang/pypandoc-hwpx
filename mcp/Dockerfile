@@ -1,0 +1,31 @@
+FROM python:3.12-slim
+
+# Install pandoc and clean up apt cache in a single layer
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends pandoc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
+
+WORKDIR /app
+
+# Copy the parent package first (required by server.py imports)
+COPY setup.py README.md LICENSE ./
+COPY pypandoc_hwpx/ pypandoc_hwpx/
+
+# Install the parent package
+RUN pip install --no-cache-dir -e .
+
+# Copy MCP server project files and sync dependencies
+COPY mcp/pyproject.toml mcp/uv.lock mcp/.python-version mcp/
+WORKDIR /app/mcp
+RUN uv sync --frozen --no-dev
+
+# Copy MCP server source
+COPY mcp/server.py .
+
+# Default: Streamable HTTP transport for container usage
+EXPOSE 8000
+ENTRYPOINT ["uv", "run", "server.py"]
+CMD ["--http"]
