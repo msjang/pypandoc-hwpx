@@ -25,7 +25,6 @@ RUN uv sync --frozen --no-dev
 # Copy MCP server source
 COPY mcp/server.py .
 
-# Default: Streamable HTTP transport for container usage
-EXPOSE 8000
+# Default: stdio transport; pass --http [--port PORT] for Streamable HTTP
 ENTRYPOINT ["uv", "run", "server.py"]
-CMD ["--http"]
+CMD []

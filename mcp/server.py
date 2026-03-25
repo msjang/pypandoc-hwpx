@@ -123,10 +123,20 @@ def main():
         default=False,
         help="Run the server using Streamable HTTP transport instead of stdio",
     )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port number for the Streamable HTTP transport (default: 8000)",
+    )
     args = parser.parse_args()
 
     transport = "streamable-http" if args.http else "stdio"
-    mcp.run(transport=transport)
+    kwargs: dict = {"transport": transport}
+    if args.http:
+        kwargs["host"] = "0.0.0.0"
+        kwargs["port"] = args.port
+    mcp.run(**kwargs)
 
 
 if __name__ == "__main__":
