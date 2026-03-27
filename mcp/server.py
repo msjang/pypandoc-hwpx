@@ -3,7 +3,6 @@ import json
 import os
 import sys
 import tempfile
-from typing import Any
 
 import pypandoc
 from mcp.server.fastmcp import FastMCP
@@ -132,12 +131,12 @@ def main():
     )
     args = parser.parse_args()
 
-    transport = "streamable-http" if args.http else "stdio"
-    kwargs: dict[str, Any] = {"transport": transport}
     if args.http:
-        kwargs["host"] = "0.0.0.0"
-        kwargs["port"] = args.port
-    mcp.run(**kwargs)
+        mcp.settings.host = "0.0.0.0"
+        mcp.settings.port = args.port
+
+    transport = "streamable-http" if args.http else "stdio"
+    mcp.run(transport=transport)
 
 
 if __name__ == "__main__":
