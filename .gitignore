@@ -17,7 +17,8 @@ venv/
 ENV/
 
 # IDE / Editor
-.vscode/
+.vscode/*
+!.vscode/mcp.*.json
 .idea/
 *.swp
 .DS_Store

@@ -27,4 +27,3 @@ COPY mcp/server.py .
 
 # Default: stdio transport; pass --http [--port PORT] for Streamable HTTP
 ENTRYPOINT ["uv", "run", "server.py"]
-CMD []
