@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "pypandoc-hwpx": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "${workspaceFolder}/mcp",
+        "server.py"
+      ]
+    }
+  }
+}

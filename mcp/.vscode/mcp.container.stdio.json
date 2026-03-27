@@ -1,0 +1,15 @@
+{
+  "servers": {
+    "pypandoc-hwpx": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-v",
+        "${userHome}:${userHome}",
+        "pypandoc-hwpx-mcp:latest"
+      ]
+    }
+  }
+}
