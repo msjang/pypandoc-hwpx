@@ -1,13 +1,8 @@
 {
   "servers": {
     "pypandoc-hwpx": {
-      "command": "uv",
-      "args": [
-        "run",
-        "--directory",
-        "/Users/justinyoo/dev/jy/pypandoc-hwpx/mcp",
-        "server.py"
-      ]
+      "type": "http",
+      "url": "http://localhost:8000/mcp"
     }
   }
 }

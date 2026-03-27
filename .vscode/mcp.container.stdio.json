@@ -1,12 +1,14 @@
 {
   "servers": {
     "pypandoc-hwpx": {
-      "command": "uv",
+      "command": "docker",
       "args": [
         "run",
-        "--directory",
-        "/Users/justinyoo/dev/jy/pypandoc-hwpx/mcp",
-        "server.py"
+        "-i",
+        "--rm",
+        "-v",
+        "${userHome}:${userHome}",
+        "pypandoc-hwpx-mcp:latest"
       ]
     }
   }
