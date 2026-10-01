@@ -1,6 +1,9 @@
 # pypandoc-hwpx
 
-**pypandoc-hwpx**는 워드(`.docx`), 마크다운(`.md`), HTML(`.html`,`.htm`)을 아래아 한글(`.hwpx`)로 변환해주는 파이썬 도구입니다.
+**pypandoc-hwpx**는 Pandoc AST를 사이에 두고 아래아 한글(`.hwpx`)과 다른 문서 형식을 변환합니다.
+
+- 워드(`.docx`), 마크다운(`.md`), HTML 등 → `.hwpx`
+- `.hwpx` → Pandoc JSON AST → `.md`, `.docx`, `.html`, `.pdf`, `.txt` 등
 
 ## 주요 기능
 
@@ -53,6 +56,31 @@ pypandoc-hwpx test.json --reference-doc=custom.hwpx -o test-from-json.hwpx
 
 * `--reference-doc`: (선택) 스타일(글자 모양, 문단 모양, 용지 설정 등)을 가져올 기준 HWPX 파일. 지정하지 않으면 패키지에 내장된 기본 파일(`blank.hwpx`)을 사용합니다.
 
+HWPX를 다른 형식으로 보낼 때는, 패키지를 Pandoc JSON AST로 읽은 뒤 그 JSON을 위와 같은 기존 변환 경로에 넘깁니다.
+
+```sh
+# HWPX -> Markdown / DOCX / HTML / plain text / JSON AST
+pypandoc-hwpx test.hwpx -o test.md
+pypandoc-hwpx test.hwpx -o test.docx
+pypandoc-hwpx test.hwpx -o test.html
+pypandoc-hwpx test.hwpx -o test.txt
+pypandoc-hwpx test.hwpx -o test.json
+```
+
+`-o`를 생략하면 결과를 stdout으로 보냅니다. 형식을 지정하지 않으면 `plain`입니다. `-t`는 Pandoc의 `-t`와 같이 출력 형식을 고릅니다. `hwpx`, `docx`, `pdf`처럼 바이너리 형식은 `-o`가 필요합니다.
+
+```sh
+pypandoc-hwpx test.hwpx -t plain
+pypandoc-hwpx test.hwpx -t markdown | head
+pypandoc-hwpx test.hwpx -t json > test.json
+
+# Pandoc에 넘길 옵션은 -- 뒤에 둡니다.
+pypandoc-hwpx test.hwpx -t pdf -o test.pdf -- --pdf-engine=xelatex -H header.tex
+pypandoc-hwpx test.hwpx -t latex -- --toc -V documentclass=article
+```
+
+`-o`로 파일을 만들 때 이미지는 출력 파일 옆 `{이름}_media/`에 풀립니다. stdout으로 보낼 때는 그 파일을 남기지 않습니다. AST가 담지 못하는 서식(장평, 자간, 글꼴 등)과 코드 블록처럼 HWPX에 구분 정보가 없는 구조는 왕복에서 사라집니다.
+
 ## 설명 및 제약사항
 
 [Pandoc](https://pandoc.org)은 문서를 내부적으로 [JSON AST(Abstract Syntax Tree)](https://pandoc.org/using-the-pandoc-api.html) 형식으로 변환한 뒤, 이를 대상 포맷으로 다시 변환하는 방식을 사용합니다. 여러 문서 형식을 아우르기 위해, AST는 공통적으로 지원 가능한 최소한의 서식 정보만을 포함합니다.
@@ -75,8 +103,9 @@ pypandoc-hwpx test.docx -o test-from-docx.html
 
 ## 프로젝트 구조
 
-- `pypandoc_hwpx/cli.py`: 메인 실행 스크립트.
-- `pypandoc_hwpx/PandocToHwpx.py`: HWPX 변환 핵심 로직 (AST 파싱, XML 생성, Zip 처리).
+- `pypandoc_hwpx/cli.py`: 메인 실행 스크립트. `.hwpx` 입력이면 AST JSON을 만든 뒤 기존 출력 경로에 넘깁니다.
+- `pypandoc_hwpx/PandocToHwpx.py`: AST → HWPX (XML 생성, Zip 처리).
+- `pypandoc_hwpx/HwpxToPandoc.py`: HWPX → AST. `header.xml`의 스타일·개요·번호 매핑과 `section*.xml` 본문을 읽어 Pandoc JSON을 만듭니다.
 - `pypandoc_hwpx/PandocToHtml.py`: HTML 변환 핵심 로직 (이미지 추출, HTML 템플릿).
 - `pypandoc_hwpx/blank.hwpx`: HWPX 변환에 필수적인 참조용 템플릿 파일.
     - *참고: Mac용 Word 16.73에서 생성한 DOCX를 Mac용 한글 12.30.0에서 HWPX로 변환한 뒤, XML을 수동 최적화하여 제작했습니다.*

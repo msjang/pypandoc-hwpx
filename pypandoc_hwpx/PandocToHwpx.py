@@ -561,20 +561,9 @@ class PandocToHwpx:
                 column_break_val = 1
                 inlines = inlines[1:] # Remove the LineBreak
                 
-        # Map header level to style
-        # Validated Outline Levels: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-        # Header 1 -> Style 1, Header 2 -> Style 2...
-        # If styles not present, fallback?
-        
-        style_id = 0
-        if level in self.outline_style_ids:
-            style_id = self.outline_style_ids[level]
-        else:
-             # Fallback to level if possible or 0
-             # Usually standard styles are ID 1..7 for outlines
-             # But we should rely on validated map
-             style_id = level # Hope for the best if not found?
-             pass
+        # outline_style_ids is keyed by HWP outline level (0 = 제목 1),
+        # which is pandoc_level - 1. The existence check above uses that key.
+        style_id = self.outline_style_ids.get(hwpx_level, 0)
 
         # Use associated paraPr if available?
         # We need to find the paraPrIDRef for this style from header
