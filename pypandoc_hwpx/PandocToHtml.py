@@ -9,7 +9,7 @@ from PIL import Image
 
 class PandocToHtml:
     @staticmethod
-    def convert_to_html(input_path, output_path):
+    def convert_to_html(input_path, output_path, announce=True):
         json_str = pypandoc.convert_file(input_path, 'json')
         json_ast = json.loads(json_str)
         
@@ -90,7 +90,8 @@ class PandocToHtml:
 
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(final_html)
-        print(f"Successfully converted to {output_path}")
+        if announce:
+            print(f"Successfully converted to {output_path}")
 
     def __init__(self, json_ast):
         self.ast = json_ast
