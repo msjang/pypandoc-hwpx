@@ -1,3 +1,8 @@
+> WIP: pypandoc-hwpx -- hwpx-to-ast-to-others
+>
+> 제공 내용을 활용해서 역으로 hwpx를 pandoc 변환 포맷으로 변환해 봅니다.
+> 예: hwpx → md, pdf, docx, plaintext, ...
+
 # pypandoc-hwpx
 
 **pypandoc-hwpx**는 워드(`.docx`), 마크다운(`.md`), HTML(`.html`,`.htm`)을 아래아 한글(`.hwpx`)로 변환해주는 파이썬 도구입니다.
